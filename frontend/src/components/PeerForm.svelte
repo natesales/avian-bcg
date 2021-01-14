@@ -18,6 +18,18 @@
 
     function addSession() {
         isLoading = true;
+
+        switch(profile) {
+            case 0:
+                profile = "upstream"
+                break;
+            case 1:
+                profile = "peer"
+                break;
+            default:
+                profile = "downstream"
+        }
+
         fetch("__apiRoute__/sessions", {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
