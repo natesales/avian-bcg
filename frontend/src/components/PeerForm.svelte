@@ -41,7 +41,7 @@
     }
 
     function addSession() {
-        fetch("__apiRoute__/add_session", {
+        fetch("__apiRoute__/sessions", {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({

@@ -93,9 +93,9 @@ def peeringdb_info(json_body):
     return _resp(True, "Retrieved data from PeeringDB", data=pdb_resp.json()["data"])
 
 
-@app.route("/add_session", methods=["PUT"])
+@app.route("/sessions", methods=["PUT"])
 @with_json("asn", "description", "profile", "validateRpki", "validateIrr", "validateMaxPfx", "asSet", "maxPfx4", "maxPfx6", "router")
-def add_session(json_body):
+def sessions_put(json_body):
     """
     Register a BGP session in the database
     :return:
@@ -104,6 +104,11 @@ def add_session(json_body):
     db["sessions"].insert_one(json_body)
 
     return _resp(True, "Added session")
+
+
+@app.route("/sessions", methods=["GET"])
+def sessions_get():
+    return _resp(True, "Retrieved sessions", list(db["sessions"].find()))
 
 
 app.run()
