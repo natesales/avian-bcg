@@ -110,6 +110,4 @@
         </Select>
     </FormGroup>
     <Button type="submit" on:click={() => addSession()}>Submit</Button>
-
-    <h1>{router}</h1>
 </Form>
