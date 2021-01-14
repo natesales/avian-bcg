@@ -16,7 +16,8 @@ router bgp {{ config["network"]["asn"] }}
  {%- for session in sessions %}
  neighbor {{ session["neighborAddress"] }} description "{{ session["description"] }}"
  neighbor {{ session["neighborAddress"] }} remote-as {{ session["asn"] }}
- neighbor {{ session["neighborAddress"] }} peer-group {{ session["profile"].upper() }}{{ '6' if ':' in session["neighborAddress"] else '4' }}{% endfor %}
+ neighbor {{ session["neighborAddress"] }} peer-group {{ session["profile"].upper() }}{{ '6' if ':' in session["neighborAddress"] else '4' }}
+ neighbor {{ session["neighborAddress"] }} maximum-prefix {{ session["maxPfx6"] if ':' in session["neighborAddress"] else session["maxPfx4"] }} force{% endfor %}
  !
  address-family ipv4 unicast
   {%- for prefix in config["routers"][router]["origin4"] %}
