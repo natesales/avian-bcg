@@ -64,11 +64,7 @@
                                 <TabContent {...props}>
                                     <Row>
                                         <Column lg="{7}" md="{4}">
-                                            <Select
-                                                    bind:selected="{theme}"
-                                                    labelText="Carbon theme"
-                                                    style="margin-bottom: 1rem"
-                                            >
+                                            <Select bind:selected="{theme}" labelText="UI theme" style="margin-bottom: 1rem">
                                                 <SelectItem text="White" value="white"/>
                                                 <SelectItem text="Gray 10" value="g10"/>
                                                 <SelectItem text="Gray 90" value="g90"/>
