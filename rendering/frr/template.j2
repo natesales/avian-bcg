@@ -1,0 +1,56 @@
+frr version 7.5
+frr defaults traditional
+log syslog informational
+hostname {{ router }}
+service integrated-vtysh-config
+!
+router bgp {{ config["network"]["asn"] }}
+ no bgp default ipv4-unicast
+ neighbor UPSTREAM4 peer-group
+ neighbor UPSTREAM6 peer-group
+ neighbor PEER4 peer-group
+ neighbor PEER6 peer-group
+ neighbor DOWNSTREAM4 peer-group
+ neighbor DOWNSTREAM6 peer-group
+ {%- for session in sessions %}
+ neighbor {{ session["neighborAddress"] }} description "{{ session["description"] }}"
+ neighbor {{ session["neighborAddress"] }} remote-as {{ session["asn"] }}
+ neighbor {{ session["neighborAddress"] }} peer-group {{ session["profile"].upper() }}{{ '6' if ':' in session["neighborAddress"] else '4' }}{% endfor %}
+ !
+ address-family ipv4 unicast
+  {%- for prefix in config["routers"][router]["origin4"] %}
+  network {{ prefix }}{% endfor %}
+  neighbor UPSTREAM4 activate
+  neighbor UPSTREAM4 route-map IMPORT in
+  neighbor UPSTREAM4 route-map LOCAL4 out
+ exit-address-family
+ !
+ address-family ipv6 unicast
+  {%- for prefix in config["routers"][router]["origin6"] %}
+  network {{ prefix }}{% endfor %}
+  neighbor UPSTREAM6 activate
+  neighbor UPSTREAM6 route-map IMPORT in
+  neighbor UPSTREAM6 route-map LOCAL6 out
+ exit-address-family
+!
+{% if config["routers"][router]["origin4"] -%}
+{% for prefix in config["routers"][router]["origin4"] -%}
+ip prefix-list LOCAL4 seq {{ loop.index }} permit {{ prefix }}
+{% endfor %}!
+{% endif -%}
+{% if config["routers"][router]["origin6"] -%}
+{% for prefix in config["routers"][router]["origin6"] -%}
+ip prefix-list LOCAL6 seq {{ loop.index }} permit {{ prefix }}
+{% endfor %}!
+{% endif -%}
+route-map IMPORT permit 1
+!
+route-map LOCAL4 permit 1
+ match ip address prefix-list LOCAL4
+!
+route-map LOCAL6 permit 1
+ match ipv6 address prefix-list LOCAL6
+!
+line vty
+!
+end

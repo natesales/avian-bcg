@@ -6,8 +6,11 @@ from bson import ObjectId
 from flask import Flask, request, Response
 from pymongo import MongoClient
 
+from rendering import frr
+
 app = Flask(__name__)
 db = MongoClient("mongodb://localhost:27017")["avian"]
+
 
 config = {
     "network": {
@@ -15,8 +18,19 @@ config = {
         "name": "Packetframe"
     },
     "routers": {
-        "core1.pdx1": {},
-        "core1.fmt1": {}
+        "core1.pdx1": {
+            "platform": "frr",
+            "origin4": ["192.0.2.0/24"],
+            "origin6": ["2001:db8::/48"]
+        },
+        "core1.fmt1": {
+            "platform": "frr"
+        },
+        "core1.dfw1": {
+            "platform": "frr",
+            "origin4": ["192.0.2.0/24", "192.0.3.0/24"],
+            "origin6": ["2001:db8::/48", "2001:db8:3::/48"]
+        },
     }
 }
 
@@ -107,10 +121,14 @@ def sessions_get():
 @app.route("/render/<router>", methods=["GET"])
 def render(router):
     if router not in config["routers"]:
-        return _resp(False, "router doesn't exist")
+        return _resp(False, f"router {router} doesn't exist")
 
-    return ""
-    # return _resp(True, "render complete", bird.render(sessions=list(db["sessions"].find({"router": router}))))
+    if config["routers"][router]["platform"] == "frr":
+        renderer = frr
+    else:
+        return _resp(False, "router platform doesn't have a renderer")
+
+    return _resp(True, "render complete", renderer.render(config=config, router=router, sessions=list(db["sessions"].find({"router": router}))))
 
 
 app.run(debug=True)
