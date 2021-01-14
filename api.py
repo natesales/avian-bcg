@@ -1,3 +1,4 @@
+import ipaddress
 import json
 from functools import wraps
 
@@ -88,6 +89,11 @@ def sessions_put(json_body):
     :return:
     """
 
+    try:
+        ipaddress.ip_address(json_body["neighborAddress"])
+    except ValueError:
+        return _resp(False, "Invalid neighbor address")
+
     db["sessions"].insert_one(json_body)
 
     return _resp(True, "Added session")
@@ -98,4 +104,13 @@ def sessions_get():
     return _resp(True, "Retrieved sessions", list(db["sessions"].aggregate([{"$addFields": {"id": "$_id"}}])))
 
 
-app.run()
+@app.route("/render/<router>", methods=["GET"])
+def render(router):
+    if router not in config["routers"]:
+        return _resp(False, "router doesn't exist")
+
+    return ""
+    # return _resp(True, "render complete", bird.render(sessions=list(db["sessions"].find({"router": router}))))
+
+
+app.run(debug=True)

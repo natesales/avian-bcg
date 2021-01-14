@@ -7,6 +7,7 @@
     import PeerTable from "./components/PeerTable.svelte";
     import {onMount} from "svelte";
     import {config} from "./stores";
+    import Code from "./components/Code.svelte";
 
     let theme = "g10";
 
@@ -19,11 +20,11 @@
         })
             .then(resp => resp.json())
             .then(data => {
-                    if (data.meta.success) {
-                        config.set(data.data);
-                        ready = true;
-                    }
-                })
+                if (data.meta.success) {
+                    config.set(data.data);
+                    ready = true;
+                }
+            })
     })
 </script>
 
@@ -47,13 +48,22 @@
                 <Column noGutter>
                     <Tabs aria-label="Tab navigation">
                         <Tab label="Sessions"/>
+                        <Tab label="Routers"/>
                         <Tab label="Add Adjacency"/>
                         <Tab label="Settings"/>
                         <div class="tabbed-content" slot="content">
                             <Grid as fullWidth let:props>
+                                <!-- Sessions -->
                                 <TabContent {...props}>
                                     <PeerTable/>
                                 </TabContent>
+
+                                <!-- Routers -->
+                                <TabContent {...props}>
+                                    <Code code={"test123"}/>
+                                </TabContent>
+
+                                <!-- Add Adjacency -->
                                 <TabContent {...props}>
                                     <Row>
                                         <Column lg="{7}" md="{4}">
@@ -61,10 +71,12 @@
                                         </Column>
                                     </Row>
                                 </TabContent>
+
+                                <!-- Settings -->
                                 <TabContent {...props}>
                                     <Row>
                                         <Column lg="{7}" md="{4}">
-                                            <Select bind:selected="{theme}" labelText="UI theme" style="margin-bottom: 1rem">
+                                            <Select bind:selected="{theme}" labelText="UI theme">
                                                 <SelectItem text="White" value="white"/>
                                                 <SelectItem text="Gray 10" value="g10"/>
                                                 <SelectItem text="Gray 90" value="g90"/>
