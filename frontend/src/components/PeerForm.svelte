@@ -1,5 +1,5 @@
 <script>
-    import {Button, Checkbox, ContentSwitcher, Form, FormGroup, NumberInput, Select, SelectItem, Switch, TextInput, InlineLoading} from "carbon-components-svelte";
+    import {Button, Checkbox, ContentSwitcher, Form, FormGroup, InlineLoading, NumberInput, Select, SelectItem, Switch, TextInput} from "carbon-components-svelte";
     import {config} from "../stores";
 
     let asn;
@@ -11,7 +11,8 @@
     let asSet;
     let maxPfx4;
     let maxPfx6;
-    let router = $config["routers"][0];
+    let router = Object.keys($config["routers"])[0];
+    let neighborAddress;
 
     let isLoading = false;
 
@@ -30,7 +31,8 @@
                 asSet,
                 maxPfx4,
                 maxPfx6,
-                router
+                router,
+                neighborAddress
             })
         })
             .then(resp => resp.json())
@@ -41,7 +43,8 @@
                     alert(data.meta.message)
                 }
                 isLoading = false;
-                // TODO: redirect to main page
+                neighborAddress = "";
+                alert(data.meta.message)
             })
     }
 
@@ -110,11 +113,16 @@
 
         <FormGroup>
             <Select bind:selected={router} labelText="Router">
-                {#each $config.routers as router}
+                {#each Object.keys($config.routers) as router}
                     <SelectItem text={router} value={router}/>
                 {/each}
             </Select>
         </FormGroup>
+
+        <FormGroup>
+            <TextInput bind:value={neighborAddress} labelText="Remote Address"/>
+        </FormGroup>
+
         <Button type="submit">
             {#if isLoading}
                 <InlineLoading/>

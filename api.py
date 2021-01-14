@@ -13,7 +13,10 @@ config = {
         "asn": 34553,
         "name": "Packetframe"
     },
-    "routers": ["core1.pdx1", "core1.fmt1"]
+    "routers": {
+        "core1.pdx1": {},
+        "core1.fmt1": {}
+    }
 }
 
 
@@ -78,7 +81,7 @@ def get_config():
 
 
 @app.route("/sessions", methods=["PUT"])
-@with_json("asn", "description", "profile", "validateRpki", "validateIrr", "validateMaxPfx", "asSet", "maxPfx4", "maxPfx6", "router")
+@with_json("asn", "description", "profile", "validateRpki", "validateIrr", "validateMaxPfx", "asSet", "maxPfx4", "maxPfx6", "router", "neighborAddress")
 def sessions_put(json_body):
     """
     Register a BGP session in the database
