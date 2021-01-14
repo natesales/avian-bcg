@@ -5,22 +5,32 @@
     import Footer from "./components/Footer.svelte";
     import PeerForm from "./components/PeerForm.svelte";
     import PeerTable from "./components/PeerTable.svelte";
+    import {onMount} from "svelte";
+    import {config} from "./stores";
 
     let theme = "g10";
 
-    function getConfig() {
+    let ready = false;
+
+    onMount(() => {
         fetch("__apiRoute__/config", {
             method: "GET",
             headers: {"Content-Type": "application/json"},
         })
             .then(resp => resp.json())
-            .then(data => {})
-    }
+            .then(data => {
+                    if (data.meta.success) {
+                        config.set(data.data);
+                        ready = true;
+                    }
+                })
+    })
 </script>
 
 <Theme bind:theme persist>
     <Header/>
     <Content style="background: none; padding: 1rem">
+        {#if ready}
         <Grid>
             <Row>
                 <Column lg="{16}">
@@ -92,5 +102,6 @@
             </Row>
             <Footer/>
         </Grid>
+        {/if}
     </Content>
 </Theme>

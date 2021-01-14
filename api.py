@@ -9,6 +9,14 @@ from pymongo import MongoClient
 app = Flask(__name__)
 db = MongoClient("mongodb://localhost:27017")["avian"]
 
+config = {
+    "network": {
+        "asn": 34553,
+        "name": "Packetframe"
+    },
+    "routers": ["core1.pdx1", "core1.fmt1"]
+}
+
 
 class JSONResponseEncoder(json.JSONEncoder):
     """
@@ -63,6 +71,11 @@ def with_json(*outer_args):
         return wrapper
 
     return decorator
+
+
+@app.route("/config", methods=["GET"])
+def get_config():
+    return _resp(True, "Retrieved config", config)
 
 
 @app.route("/peeringdb/info", methods=["POST"])

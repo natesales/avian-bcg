@@ -1,7 +1,6 @@
 <script>
     import {Button, Checkbox, ContentSwitcher, Form, FormGroup, NumberInput, Select, SelectItem, Switch, TextInput} from "carbon-components-svelte";
-
-    let routers = ["core1.pdx1", "core1.fmt1"];
+    import {config} from "../stores";
 
     let asn;
     let description;
@@ -12,7 +11,7 @@
     let asSet;
     let maxPfx4;
     let maxPfx6;
-    let router = routers[0];
+    let router = $config["routers"][0];
 
     $:{ // TODO: This sends a lot of requests, but on:blur doesnt seem to work
         fetch("__apiRoute__/peeringdb/info", {
@@ -108,7 +107,7 @@
 
         <FormGroup>
             <Select bind:selected={router} labelText="Router">
-                {#each routers as router}
+                {#each $config.routers as router}
                     <SelectItem text={router} value={router}/>
                 {/each}
             </Select>
