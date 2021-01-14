@@ -1,5 +1,5 @@
 <script>
-    import {Button, Checkbox, ContentSwitcher, Form, FormGroup, NumberInput, Select, SelectItem, Switch, TextInput} from "carbon-components-svelte";
+    import {Button, Checkbox, ContentSwitcher, Form, FormGroup, NumberInput, Select, SelectItem, Switch, TextInput, InlineLoading} from "carbon-components-svelte";
     import {config} from "../stores";
 
     let asn;
@@ -13,7 +13,10 @@
     let maxPfx6;
     let router = $config["routers"][0];
 
+    let isLoading = false;
+
     function addSession() {
+        isLoading = true;
         fetch("__apiRoute__/sessions", {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
@@ -37,6 +40,8 @@
                 } else {
                     alert(data.meta.message)
                 }
+                isLoading = false;
+                // TODO: redirect to main page
             })
     }
 
@@ -110,6 +115,12 @@
                 {/each}
             </Select>
         </FormGroup>
-        <Button type="submit">Submit</Button>
+        <Button type="submit">
+            {#if isLoading}
+                <InlineLoading/>
+            {:else}
+                Submit
+            {/if}
+        </Button>
     </Form>
 </main>
