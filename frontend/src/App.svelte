@@ -34,11 +34,11 @@
         <Grid>
             <Row>
                 <Column lg="{16}">
+                    <!-- TODO: Integrate this with the SPA router -->
                     <Breadcrumb aria-label="Page navigation" noTrailingSlash>
                         <BreadcrumbItem href="/">Getting started</BreadcrumbItem>
                     </Breadcrumb>
-                    <!-- TODO: Integrate this with the SPA router -->
-                    <h1 style="margin-bottom: 1.5rem">Design &amp; build with Carbon</h1>
+                    <h1 style="margin-bottom: 1.5rem">{$config.network.name} AS{$config.network.asn}</h1>
                 </Column>
             </Row>
 
@@ -46,24 +46,12 @@
                 <Column noGutter>
                     <Tabs aria-label="Tab navigation">
                         <Tab label="About"/>
-                        <Tab label="Design"/>
                         <Tab label="Add Adjacency"/>
                         <Tab label="Settings"/>
                         <div class="tabbed-content" slot="content">
                             <Grid as fullWidth let:props>
                                 <TabContent {...props}>
                                     <PeerTable/>
-                                </TabContent>
-                                <TabContent {...props}>
-                                    <Row>
-                                        <Column lg="{7}" md="{4}">
-                                            <p>
-                                                Rapidly build beautiful and accessible experiences. The
-                                                Carbon kit contains all resources you need to get
-                                                started.
-                                            </p>
-                                        </Column>
-                                    </Row>
                                 </TabContent>
                                 <TabContent {...props}>
                                     <Row>
@@ -85,13 +73,6 @@
                                                 <SelectItem text="Gray 90" value="g90"/>
                                                 <SelectItem text="Gray 100" value="g100"/>
                                             </Select>
-                                            <p>
-                                                Carbon is IBM’s open-source design system for digital
-                                                products and experiences. With the IBM Design Language
-                                                as its foundation, the system consists of working code,
-                                                design tools and resources, human interface guidelines,
-                                                and a vibrant community of contributors.
-                                            </p>
                                         </Column>
                                     </Row>
                                 </TabContent>
