@@ -7,7 +7,7 @@
     import PeerTable from "./components/PeerTable.svelte";
     import {onMount} from "svelte";
     import {config} from "./stores";
-    import Code from "./components/Code.svelte";
+    import Routers from "./pages/Routers.svelte";
 
     let theme = "g10";
 
@@ -60,7 +60,7 @@
 
                                 <!-- Routers -->
                                 <TabContent {...props}>
-                                    <Code code={"test123"}/>
+                                    <Routers/>
                                 </TabContent>
 
                                 <!-- Add Adjacency -->
