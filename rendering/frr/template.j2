@@ -5,6 +5,7 @@ hostname {{ router }}
 service integrated-vtysh-config
 !
 router bgp {{ config["network"]["asn"] }}
+ bgp graceful-shutdown
  no bgp default ipv4-unicast
  neighbor UPSTREAM4 peer-group
  neighbor UPSTREAM6 peer-group
