@@ -1,18 +1,27 @@
 <script>
     import {DataTable} from "carbon-components-svelte";
+    import {onMount} from "svelte";
 
-    const rows=[
-        { id: "a", name: "Load Balancer 3", protocol: "HTTP", port: 3000, rule: "Round robin" },
-        { id: "b", name: "Load Balancer 1", protocol: "HTTP", port: 443, rule: "Round robin" },
-        { id: "c", name: "Load Balancer 2", protocol: "HTTP", port: 80, rule: "DNS delegation" },
-        { id: "d", name: "Load Balancer 6", protocol: "HTTP", port: 3000, rule: "Round robin" },
-        { id: "e", name: "Load Balancer 4", protocol: "HTTP", port: 443, rule: "Round robin" },
-        { id: "f", name: "Load Balancer 5", protocol: "HTTP", port: 80, rule: "DNS delegation" }
-    ]
+    let peers;
+
+    onMount(() => {
+        fetch("__apiRoute__/sessions", {
+            method: "GET",
+            headers: {"Content-Type": "application/json"},
+        })
+            .then(resp => resp.json())
+            .then(data => {
+                if (data.meta.success) {
+                    peers = data.data;
+                } else {
+                    alert(data.meta.message)
+                }
+            })
+    })
 </script>
 
 <main>
     <h3>Session Overview</h3>
     <br>
-    <DataTable headers={[{ key: "name", value: "Name" }, { key: "asn", value: "ASN" }, { key: "neighbor-address", value: "Neighbor Address" }, { key: "local-address", value: "Local Address" }]} rows={rows}/>
+    <DataTable headers={[{ key: "description", value: "Description" }, { key: "asn", value: "ASN" }]} rows={peers}/>
 </main>
