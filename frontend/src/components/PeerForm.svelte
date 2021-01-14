@@ -13,33 +13,6 @@
     let maxPfx6;
     let router = $config["routers"][0];
 
-    $:{ // TODO: This sends a lot of requests, but on:blur doesnt seem to work
-        fetch("__apiRoute__/peeringdb/info", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                "asn": asn
-            })
-        })
-            .then(resp => resp.json())
-            .then(data => {
-                if (data.meta.success) {
-                    if (data.data[0].name) {
-                        description = data.data[0].name;
-                    }
-                    if (data.data[0].irr_as_set) {
-                        asSet = data.data[0].irr_as_set;
-                    }
-                    if (data.data[0].info_prefixes4) {
-                        maxPfx4 = data.data[0].info_prefixes4;
-                    }
-                    if (data.data[0].info_prefixes6) {
-                        maxPfx6 = data.data[0].info_prefixes6;
-                    }
-                }
-            })
-    }
-
     function addSession() {
         fetch("__apiRoute__/sessions", {
             method: "PUT",
@@ -58,13 +31,38 @@
             })
         })
             .then(resp => resp.json())
-        .then(data => {
-            if (data.meta.success) {
-                console.log(data)
-            } else {
-                alert(data.meta.message)
-            }
-        })
+            .then(data => {
+                if (data.meta.success) {
+                    console.log(data)
+                } else {
+                    alert(data.meta.message)
+                }
+            })
+    }
+
+    $: {
+        if (asn !== undefined && asn > 0) {
+            fetch("https://peeringdb.com/api/net?asn=" + asn, {
+                method: "GET"
+            })
+                .then(resp => resp.json())
+                .then(data => {
+                    if (data && data.data[0]) {
+                        if (data.data[0].name) {
+                            description = data.data[0].name;
+                        }
+                        if (data.data[0].irr_as_set) {
+                            asSet = data.data[0].irr_as_set;
+                        }
+                        if (data.data[0].info_prefixes4) {
+                            maxPfx4 = data.data[0].info_prefixes4;
+                        }
+                        if (data.data[0].info_prefixes6) {
+                            maxPfx6 = data.data[0].info_prefixes6;
+                        }
+                    }
+                })
+        }
     }
 </script>
 
@@ -89,7 +87,7 @@
             <Checkbox bind:checked={validateRpki} labelText="RPKI ROV"/>
             <Checkbox bind:checked={validateIrr} labelText="IRR"/>
             <Checkbox bind:checked={validateMaxPfx} labelText="Max prefix"/>
-            <Checkbox labelText="Peerlock" disabled/>
+            <Checkbox disabled labelText="Peerlock"/>
         </FormGroup>
 
         {#if validateIrr}

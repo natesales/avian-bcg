@@ -1,7 +1,6 @@
 import json
 from functools import wraps
 
-import requests
 from bson import ObjectId
 from flask import Flask, request, Response
 from pymongo import MongoClient
@@ -76,21 +75,6 @@ def with_json(*outer_args):
 @app.route("/config", methods=["GET"])
 def get_config():
     return _resp(True, "Retrieved config", config)
-
-
-@app.route("/peeringdb/info", methods=["POST"])
-@with_json("asn")
-def peeringdb_info(json_body):
-    """
-    Get network info from PeeringDB
-    :return:
-    """
-
-    pdb_resp = requests.get(f"https://peeringdb.com/api/net?asn={json_body['asn']}")
-    if pdb_resp.status_code != 200 or not pdb_resp.json()["data"]:
-        return _resp(False, "PeeringDB page not found")
-
-    return _resp(True, "Retrieved data from PeeringDB", data=pdb_resp.json()["data"])
 
 
 @app.route("/sessions", methods=["PUT"])
