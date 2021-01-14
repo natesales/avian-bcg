@@ -46,7 +46,7 @@
             <Row>
                 <Column noGutter>
                     <Tabs aria-label="Tab navigation">
-                        <Tab label="About"/>
+                        <Tab label="Sessions"/>
                         <Tab label="Add Adjacency"/>
                         <Tab label="Settings"/>
                         <div class="tabbed-content" slot="content">
