@@ -9,6 +9,7 @@
   import UserAvatar20 from "carbon-icons-svelte/lib/UserAvatar20";
   import AppSwitcher20 from "carbon-icons-svelte/lib/AppSwitcher20";
   import { getContext } from "svelte";
+  import {config} from "../stores";
 
   const ctx = getContext("Theme");
 
@@ -23,7 +24,7 @@
   }
 </script>
 
-<Header company="IBM" platformName="Carbon Components Svelte" href="/">
+<Header company={$config.network.name + " AS" + $config.network.asn} platformName="AVIAN Network Dashboard" href="/">
   <div slot="skip-to-content">
     <SkipToContent />
   </div>

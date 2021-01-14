@@ -28,9 +28,10 @@
 </script>
 
 <Theme bind:theme persist>
+    {#if ready}
     <Header/>
     <Content style="background: none; padding: 1rem">
-        {#if ready}
+
         <Grid>
             <Row>
                 <Column lg="{16}">
@@ -38,7 +39,7 @@
                     <Breadcrumb aria-label="Page navigation" noTrailingSlash>
                         <BreadcrumbItem href="/">Getting started</BreadcrumbItem>
                     </Breadcrumb>
-                    <h1 style="margin-bottom: 1.5rem">{$config.network.name} AS{$config.network.asn}</h1>
+                    <h1 style="margin-bottom: 1.5rem">Network Overview</h1>
                 </Column>
             </Row>
 
@@ -83,6 +84,6 @@
             </Row>
             <Footer/>
         </Grid>
-        {/if}
     </Content>
+    {/if}
 </Theme>
