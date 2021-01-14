@@ -11,4 +11,8 @@
     ]
 </script>
 
-<DataTable headers={[{ key: "name", value: "Name" }, { key: "asn", value: "ASN" }, { key: "neighbor-address", value: "Neighbor Address" }, { key: "local-address", value: "Local Address" }]} rows={rows}/>
+<main>
+    <h3>Session Overview</h3>
+    <br>
+    <DataTable headers={[{ key: "name", value: "Name" }, { key: "asn", value: "ASN" }, { key: "neighbor-address", value: "Neighbor Address" }, { key: "local-address", value: "Local Address" }]} rows={rows}/>
+</main>

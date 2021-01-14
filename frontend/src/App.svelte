@@ -1,5 +1,5 @@
 <script>
-    import {Breadcrumb, BreadcrumbItem, Column, Content, Grid, Row, Select, SelectItem, Tab, TabContent, Tabs,} from "carbon-components-svelte";
+    import {Breadcrumb, BreadcrumbItem, Column, Content, Grid, Row, Select, SelectItem, Tab, TabContent, Tabs} from "carbon-components-svelte";
     import Header from "./components/Header.svelte";
     import Theme from "./components/Theme.svelte";
     import Footer from "./components/Footer.svelte";
@@ -7,6 +7,15 @@
     import PeerTable from "./components/PeerTable.svelte";
 
     let theme = "g10";
+
+    function getConfig() {
+        fetch("__apiRoute__/config", {
+            method: "GET",
+            headers: {"Content-Type": "application/json"},
+        })
+            .then(resp => resp.json())
+            .then(data => {})
+    }
 </script>
 
 <Theme bind:theme persist>
@@ -33,8 +42,6 @@
                         <div class="tabbed-content" slot="content">
                             <Grid as fullWidth let:props>
                                 <TabContent {...props}>
-                                    <h4>Network Overview</h4>
-                                    <br>
                                     <PeerTable/>
                                 </TabContent>
                                 <TabContent {...props}>
@@ -51,8 +58,6 @@
                                 <TabContent {...props}>
                                     <Row>
                                         <Column lg="{7}" md="{4}">
-                                            <h4>Add a new neighbor adjacency</h4>
-                                            <br>
                                             <PeerForm/>
                                         </Column>
                                     </Row>

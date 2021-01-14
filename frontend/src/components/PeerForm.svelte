@@ -69,45 +69,50 @@
     }
 </script>
 
-<Form on:submit>
-    <FormGroup>
-        <NumberInput bind:value={asn} helperText="Autonomous System Number" min={0}/>
-        <TextInput bind:value={description} labelText="Session description"/>
-    </FormGroup>
-
-    <FormGroup legendText="Peer profile">
-        <ContentSwitcher bind:selectedIndex={profile}>
-            <Switch text="Upstream"/>
-            <Switch text="Peer"/>
-            <Switch text="Downstream"/>
-        </ContentSwitcher>
-    </FormGroup>
-
-    <FormGroup legendText="Validation">
-        <Checkbox bind:checked={validateRpki} labelText="RPKI ROV"/>
-        <Checkbox bind:checked={validateIrr} labelText="IRR"/>
-        <Checkbox bind:checked={validateMaxPfx} labelText="Max prefix"/>
-    </FormGroup>
-
-    {#if validateIrr}
+<main>
+    <Form on:submit={() => addSession()}>
+        <h4>Add a new neighbor adjacency</h4>
+        <br>
         <FormGroup>
-            <TextInput labelText="AS-SET" bind:value={asSet}/>
+            <NumberInput bind:value={asn} helperText="Autonomous System Number" min={0}/>
+            <TextInput bind:value={description} labelText="Session description"/>
         </FormGroup>
-    {/if}
 
-    {#if validateMaxPfx}
+        <FormGroup legendText="Peer profile">
+            <ContentSwitcher bind:selectedIndex={profile}>
+                <Switch text="Upstream"/>
+                <Switch text="Peer"/>
+                <Switch text="Downstream"/>
+            </ContentSwitcher>
+        </FormGroup>
+
+        <FormGroup legendText="Filtering">
+            <Checkbox bind:checked={validateRpki} labelText="RPKI ROV"/>
+            <Checkbox bind:checked={validateIrr} labelText="IRR"/>
+            <Checkbox bind:checked={validateMaxPfx} labelText="Max prefix"/>
+            <Checkbox labelText="Peerlock" disabled/>
+        </FormGroup>
+
+        {#if validateIrr}
+            <FormGroup>
+                <TextInput labelText="AS-SET" bind:value={asSet}/>
+            </FormGroup>
+        {/if}
+
+        {#if validateMaxPfx}
+            <FormGroup>
+                <NumberInput label="IPv4 Prefix Limit" bind:value={maxPfx4}/>
+                <NumberInput label="IPv6 Prefix Limit" bind:value={maxPfx6}/>
+            </FormGroup>
+        {/if}
+
         <FormGroup>
-            <NumberInput label="IPv4 Prefix Limit" bind:value={maxPfx4}/>
-            <NumberInput label="IPv6 Prefix Limit" bind:value={maxPfx6}/>
+            <Select bind:selected={router} labelText="Router">
+                {#each routers as router}
+                    <SelectItem text={router} value={router}/>
+                {/each}
+            </Select>
         </FormGroup>
-    {/if}
-
-    <FormGroup>
-        <Select bind:selected={router} labelText="Router">
-            {#each routers as router}
-                <SelectItem text={router} value={router}/>
-            {/each}
-        </Select>
-    </FormGroup>
-    <Button type="submit" on:click={() => addSession()}>Submit</Button>
-</Form>
+        <Button type="submit">Submit</Button>
+    </Form>
+</main>
