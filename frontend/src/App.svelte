@@ -4,6 +4,7 @@
     import Theme from "./components/Theme.svelte";
     import Footer from "./components/Footer.svelte";
     import PeerForm from "./components/PeerForm.svelte";
+    import PeerTable from "./components/PeerTable.svelte";
 
     let theme = "g10";
 </script>
@@ -28,8 +29,34 @@
                         <Tab label="About"/>
                         <Tab label="Design"/>
                         <Tab label="Add Adjacency"/>
+                        <Tab label="Settings"/>
                         <div class="tabbed-content" slot="content">
                             <Grid as fullWidth let:props>
+                                <TabContent {...props}>
+                                    <h4>Network Overview</h4>
+                                    <br>
+                                    <PeerTable/>
+                                </TabContent>
+                                <TabContent {...props}>
+                                    <Row>
+                                        <Column lg="{7}" md="{4}">
+                                            <p>
+                                                Rapidly build beautiful and accessible experiences. The
+                                                Carbon kit contains all resources you need to get
+                                                started.
+                                            </p>
+                                        </Column>
+                                    </Row>
+                                </TabContent>
+                                <TabContent {...props}>
+                                    <Row>
+                                        <Column lg="{7}" md="{4}">
+                                            <h4>Add a new neighbor adjacency</h4>
+                                            <br>
+                                            <PeerForm/>
+                                        </Column>
+                                    </Row>
+                                </TabContent>
                                 <TabContent {...props}>
                                     <Row>
                                         <Column lg="{7}" md="{4}">
@@ -50,26 +77,6 @@
                                                 design tools and resources, human interface guidelines,
                                                 and a vibrant community of contributors.
                                             </p>
-                                        </Column>
-                                    </Row>
-                                </TabContent>
-                                <TabContent {...props}>
-                                    <Row>
-                                        <Column lg="{7}" md="{4}">
-                                            <p>
-                                                Rapidly build beautiful and accessible experiences. The
-                                                Carbon kit contains all resources you need to get
-                                                started.
-                                            </p>
-                                        </Column>
-                                    </Row>
-                                </TabContent>
-                                <TabContent {...props}>
-                                    <Row>
-                                        <Column lg="{7}" md="{4}">
-                                            <h4>Add a new neighbor adjacency</h4>
-                                            <br>
-                                            <PeerForm/>
                                         </Column>
                                     </Row>
                                 </TabContent>
