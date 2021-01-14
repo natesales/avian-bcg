@@ -27,5 +27,5 @@
 <main>
     <h3>Session Overview</h3>
     <br>
-    <DataTable headers={[{ key: "description", value: "Description" }, { key: "asn", value: "ASN" }]} rows={peers}/>
+    <DataTable headers={[{ key: "description", value: "Description" }, { key: "asn", value: "ASN" }, { key: "neighborAddress", value: "Address" }, { key: "router", value: "Router" }]} rows={peers}/>
 </main>

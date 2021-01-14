@@ -120,7 +120,7 @@
         </FormGroup>
 
         <FormGroup>
-            <TextInput bind:value={neighborAddress} labelText="Remote Address"/>
+            <TextInput bind:value={neighborAddress} labelText="Neighbor Address"/>
         </FormGroup>
 
         <Button type="submit">
