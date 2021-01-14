@@ -1,16 +1,18 @@
 <script>
     import {Button, Checkbox, ContentSwitcher, Form, FormGroup, NumberInput, Select, SelectItem, Switch, TextInput} from "carbon-components-svelte";
 
+    let routers = ["core1.pdx1", "core1.fmt1"];
+
     let asn;
     let description;
-    let peerProfile = 1;
+    let profile = 1;
     let validateRpki = true;
     let validateIrr = true;
     let validateMaxPfx = true;
     let asSet;
     let maxPfx4;
     let maxPfx6;
-    let router;
+    let router = routers[0];
 
     $:{ // TODO: This sends a lot of requests, but on:blur doesnt seem to work
         fetch("__apiRoute__/peeringdb/info", {
@@ -38,6 +40,33 @@
                 }
             })
     }
+
+    function addSession() {
+        fetch("__apiRoute__/add_session", {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                asn,
+                description,
+                profile,
+                validateRpki,
+                validateIrr,
+                validateMaxPfx,
+                asSet,
+                maxPfx4,
+                maxPfx6,
+                router
+            })
+        })
+            .then(resp => resp.json())
+        .then(data => {
+            if (data.meta.success) {
+                console.log(data)
+            } else {
+                alert(data.meta.message)
+            }
+        })
+    }
 </script>
 
 <Form on:submit>
@@ -47,7 +76,7 @@
     </FormGroup>
 
     <FormGroup legendText="Peer profile">
-        <ContentSwitcher bind:selectedIndex={peerProfile}>
+        <ContentSwitcher bind:selectedIndex={profile}>
             <Switch text="Upstream"/>
             <Switch text="Peer"/>
             <Switch text="Downstream"/>
@@ -74,10 +103,13 @@
     {/if}
 
     <FormGroup>
-        <Select bind:selected={router} id="select-1" labelText="Router">
-            <SelectItem text="core1.fmt1" value="core1.fmt1"/>
-            <SelectItem text="core1.pdx1" value="core1.pdx1"/>
+        <Select bind:selected={router} labelText="Router">
+            {#each routers as router}
+                <SelectItem text={router} value={router}/>
+            {/each}
         </Select>
     </FormGroup>
-    <Button type="submit">Submit</Button>
+    <Button type="submit" on:click={() => addSession()}>Submit</Button>
+
+    <h1>{router}</h1>
 </Form>

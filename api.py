@@ -4,8 +4,10 @@ from functools import wraps
 import requests
 from bson import ObjectId
 from flask import Flask, request, Response
+from pymongo import MongoClient
 
 app = Flask(__name__)
+db = MongoClient("mongodb://localhost:27017")["avian"]
 
 
 class JSONResponseEncoder(json.JSONEncoder):
@@ -76,6 +78,19 @@ def peeringdb_info(json_body):
         return _resp(False, "PeeringDB page not found")
 
     return _resp(True, "Retrieved data from PeeringDB", data=pdb_resp.json()["data"])
+
+
+@app.route("/add_session", methods=["PUT"])
+@with_json("asn", "description", "profile", "validateRpki", "validateIrr", "validateMaxPfx", "asSet", "maxPfx4", "maxPfx6", "router")
+def add_session(json_body):
+    """
+    Register a BGP session in the database
+    :return:
+    """
+
+    db["sessions"].insert_one(json_body)
+
+    return _resp(True, "Added session")
 
 
 app.run()
