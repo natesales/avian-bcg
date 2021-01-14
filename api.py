@@ -63,7 +63,7 @@ def with_json(*outer_args):
     return decorator
 
 
-@app.route("/peeringdb/info", methods=["GET"])
+@app.route("/peeringdb/info", methods=["POST"])
 @with_json("asn")
 def peeringdb_info(json_body):
     """
@@ -72,10 +72,10 @@ def peeringdb_info(json_body):
     """
 
     pdb_resp = requests.get(f"https://peeringdb.com/api/net?asn={json_body['asn']}")
-    if pdb_resp.status_code != 200:
-        return _resp
+    if pdb_resp.status_code != 200 or not pdb_resp.json()["data"]:
+        return _resp(False, "PeeringDB page not found")
 
-    return _resp(True, "Retrieved data from PeeringDB", pdb_resp)
+    return _resp(True, "Retrieved data from PeeringDB", data=pdb_resp.json()["data"])
 
 
 app.run()
