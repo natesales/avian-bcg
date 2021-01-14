@@ -1,10 +1,9 @@
 <script>
     import {DataTable} from "carbon-components-svelte";
-    import {onMount} from "svelte";
 
     let peers;
 
-    onMount(() => {
+    function updateTable() {
         fetch("__apiRoute__/sessions", {
             method: "GET",
             headers: {"Content-Type": "application/json"},
@@ -17,7 +16,12 @@
                     alert(data.meta.message)
                 }
             })
-    })
+    }
+
+    updateTable();
+
+    // Update table every 2 seconds
+    setInterval(updateTable, 2000)
 </script>
 
 <main>
