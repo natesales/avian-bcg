@@ -92,7 +92,7 @@ def sessions_put(json_body):
 
 @app.route("/sessions", methods=["GET"])
 def sessions_get():
-    return _resp(True, "Retrieved sessions", list(db["sessions"].find()))
+    return _resp(True, "Retrieved sessions", list(db["sessions"].aggregate([{"$addFields": {"id": "$_id"}}])))
 
 
 app.run()
